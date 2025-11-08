@@ -8,12 +8,16 @@ configure_file(Engine/src/ConfigData.h.in ${CMAKE_CURRENT_BINARY_DIR}/Engine/Con
 
 add_library(Engine SHARED
     Engine/src/Engine/Application.cpp
+    Engine/src/Engine/Log.cpp
 )
+
 target_include_directories(Engine
     PUBLIC
         Engine/src
         ${CMAKE_CURRENT_BINARY_DIR}/Engine
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/spdlog/include
 )
+
 target_compile_definitions(Engine
     PRIVATE ENGINE_BUILD
     PUBLIC ENGINE_DLL
