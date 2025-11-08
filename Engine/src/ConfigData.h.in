@@ -1,0 +1,7 @@
+#pragma once
+
+#include <string_view>
+
+namespace Engine {
+    inline constexpr std::string_view kEngineConfig = R"ENGINECFG(@ENGINE_CONFIG_CONTENTS@)ENGINECFG";
+}

@@ -1,7 +1,18 @@
 #pragma once
 
-#include <iostream>
+#include <string_view>
+
+#if defined(_WIN32) && defined(ENGINE_DLL)
+    #if defined(ENGINE_BUILD)
+        #define ENGINE_API __declspec(dllexport)
+    #else
+        #define ENGINE_API __declspec(dllimport)
+    #endif
+#else
+    #define ENGINE_API
+#endif
 
 namespace Engine {
-    __declspec(dllexport) void Print();
+    ENGINE_API void Print();
+    ENGINE_API std::string_view GetConfig();
 }
