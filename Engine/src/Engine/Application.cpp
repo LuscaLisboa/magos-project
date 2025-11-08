@@ -1,7 +1,8 @@
 #include "Application.h" 
 #include "ConfigData.h"
 
-#include <iostream>
+#include "Engine/Events/ApplicationEvent.h"
+#include "Engine/Log.h"
 
 namespace Engine {
     std::string_view GetConfig(){
@@ -17,8 +18,9 @@ namespace Engine {
     }
 
     void Application::Run(){
-        while(true){
-            
-        }
+        WindowResizeEvent e(1200, 720);
+        ENGINE_TRACE(e);
+
+        while(true);
     }
 }
