@@ -7,7 +7,7 @@ file(READ ${ENGINE_CONFIG_FILE} ENGINE_CONFIG_CONTENTS)
 configure_file(Engine/src/ConfigData.h.in ${CMAKE_CURRENT_BINARY_DIR}/Engine/ConfigData.h @ONLY)
 
 add_library(Engine SHARED
-    Engine/src/test.cpp
+    Engine/src/Engine/Application.cpp
 )
 target_include_directories(Engine
     PUBLIC
@@ -20,7 +20,7 @@ target_compile_definitions(Engine
 )
 
 add_executable(Sandbox
-    Sandbox/src/Application.cpp
+    Sandbox/src/SandboxApp.cpp
 )
 target_link_libraries(Sandbox PRIVATE Engine)
 
