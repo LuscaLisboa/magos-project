@@ -9,6 +9,7 @@ configure_file(Engine/src/ConfigData.h.in ${CMAKE_CURRENT_BINARY_DIR}/Engine/Con
 add_library(Engine SHARED
     Engine/src/Engine/Application.cpp
     Engine/src/Engine/Log.cpp
+    Engine/src/enginepch.cpp
 )
 
 target_include_directories(Engine
@@ -16,7 +17,13 @@ target_include_directories(Engine
         Engine/src
         ${CMAKE_CURRENT_BINARY_DIR}/Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/spdlog/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
         ${CMAKE_CURRENT_BINARY_DIR}/Engine/src/Engine/Events
+)
+
+target_precompile_headers(Engine 
+    PRIVATE
+        Engine/src/enginepch.h
 )
 
 target_compile_definitions(Engine
