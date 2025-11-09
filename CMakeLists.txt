@@ -6,11 +6,18 @@ set(ENGINE_CONFIG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Engine/config/engine_config.j
 file(READ ${ENGINE_CONFIG_FILE} ENGINE_CONFIG_CONTENTS)
 configure_file(Engine/src/ConfigData.h.in ${CMAKE_CURRENT_BINARY_DIR}/Engine/ConfigData.h @ONLY)
 
+add_subdirectory(Engine/vendor/GLFW)
+
+find_package(OpenGL REQUIRED)
+
 add_library(Engine SHARED
     Engine/src/Engine/Application.cpp
     Engine/src/Engine/Log.cpp
     Engine/src/enginepch.cpp
+    Engine/src/Platform/Windows/WindowsWindow.cpp
 )
+
+target_link_libraries(Engine PRIVATE glfw OpenGL::GL)
 
 target_include_directories(Engine
     PUBLIC
@@ -18,6 +25,7 @@ target_include_directories(Engine
         ${CMAKE_CURRENT_BINARY_DIR}/Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/spdlog/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/src
         ${CMAKE_CURRENT_BINARY_DIR}/Engine/src/Engine/Events
 )
 
