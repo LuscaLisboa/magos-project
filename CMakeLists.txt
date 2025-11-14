@@ -40,6 +40,7 @@ target_include_directories(Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/spdlog/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/glad/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui
 )
 
 # PCH
