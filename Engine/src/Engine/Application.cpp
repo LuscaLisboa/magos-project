@@ -1,7 +1,7 @@
 #include "Application.h" 
 #include "ConfigData.h"
 
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Engine {
     std::string_view GetConfig(){
@@ -13,6 +13,9 @@ namespace Engine {
     Application::Application() {
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+        unsigned int id;
+        glGenVertexArrays(1, &id);
     }
 
     Application::~Application() {}
@@ -28,8 +31,6 @@ namespace Engine {
     void Application::OnEvent(Event& e) {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-
-        ENGINE_CORE_INFO("{0}", e.ToString());
 
         for(auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
             (*--it)->OnEvent(e);
