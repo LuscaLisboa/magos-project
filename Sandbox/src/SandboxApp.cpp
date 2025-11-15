@@ -17,7 +17,7 @@ public:
 
 	void OnEvent(Engine::Event& event) override
 	{
-		ENGINE_TRACE("{0}", event);
+		ENGINE_TRACE("{0}", event.ToString());
 	}
 
 };

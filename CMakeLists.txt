@@ -23,13 +23,22 @@ target_include_directories(glad PUBLIC Engine/vendor/glad/include)
 find_package(OpenGL REQUIRED)
 
 # Engine DLL
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui)
 add_library(Engine SHARED
     Engine/src/Engine/Application.cpp
     Engine/src/Engine/Log.cpp
     Engine/src/Engine/Layer.cpp
     Engine/src/Engine/LayerStack.cpp
+    Engine/src/Engine/ImGui/ImGuiLayer.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/enginepch.cpp
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 # Engine includes exposure
@@ -41,6 +50,7 @@ target_include_directories(Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/glad/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui/backends
 )
 
 # PCH
@@ -51,7 +61,7 @@ target_precompile_headers(Engine
 
 # export/import defines
 target_compile_definitions(Engine
-    PRIVATE ENGINE_BUILD
+    PRIVATE ENGINE_BUILD IMGUI_IMPL_OPENGL_LOADER_GLAD
     PUBLIC ENGINE_DLL
 )
 

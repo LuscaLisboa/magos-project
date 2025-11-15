@@ -1,9 +1,8 @@
 #include "enginepch.h"
 #include "ImGuiLayer.h"
 
-#include "ImGui.h"
-#include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
-#include <GLFW/glfw3.h>
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
 
 #include "Engine/Application.h"
 
@@ -55,61 +54,130 @@ namespace Engine {
     }
 
     void ImGuiLayer::OnEvent(Event& event) {
-
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<MouseButtonPressedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
+        dispatcher.Dispatch<MouseButtonReleasedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
+        dispatcher.Dispatch<MouseMovedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnMouseMovedEvent));
+        dispatcher.Dispatch<MouseScrolledEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnMouseScrolledEvent));
+        dispatcher.Dispatch<KeyPressedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnKeyPressedEvent));
+        dispatcher.Dispatch<KeyReleasedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnKeyReleasedEvent));
+        dispatcher.Dispatch<KeyTypedEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnKeyTypedEvent));
+        dispatcher.Dispatch<WindowResizeEvent>(ENGINE_BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
     }
 
-    //======================NOT IMPLEMENTED YET======================//
-    // static void GLFWMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    //     ImGuiIO& io = ImGui::GetIO();
+    bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseDown[e.GetMouseButton()] = true;
 
-    //     if (button >= 0 && button < 3)
-    //         io.AddMouseButtonEvent(button, action == GLFW_PRESS);
-    // }
+        return false;
+    }
 
-    // static void GLFWCursorPosCallback(GLFWwindow* window, double x, double y) {
-    //     ImGuiIO& io = ImGui::GetIO();
-    //     io.AddMousePosEvent((float)x, (float)y);
-    // }
+    bool ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseDown[e.GetMouseButton()] = false;
 
-    // static void GLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    //     ImGuiIO& io = ImGui::GetIO();
+        return false;
+    }
 
-    //     ImGuiKey imguiKey = KeyCodeToImGuiKey(key);
-    //     if (imguiKey != ImGuiKey_None)
-    //         io.AddKeyEvent(imguiKey, action != GLFW_RELEASE);
+    bool ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        io.MousePos = ImVec2(e.GetX(), e.GetY());
 
-    //     io.AddKeyEvent(ImGuiMod_Ctrl,  (mods & GLFW_MOD_CONTROL) != 0);
-    //     io.AddKeyEvent(ImGuiMod_Shift, (mods & GLFW_MOD_SHIFT)   != 0);
-    //     io.AddKeyEvent(ImGuiMod_Alt,   (mods & GLFW_MOD_ALT)     != 0);
-    //     io.AddKeyEvent(ImGuiMod_Super, (mods & GLFW_MOD_SUPER)   != 0);
-    // }
+        return false;
+    }
 
-    // static ImGuiKey KeyCodeToImGuiKey(int key) {
-        switch (key)
-        {
-            case GLFW_KEY_TAB:        return ImGuiKey_Tab;
-            case GLFW_KEY_LEFT:       return ImGuiKey_LeftArrow;
-            case GLFW_KEY_RIGHT:      return ImGuiKey_RightArrow;
-            case GLFW_KEY_UP:         return ImGuiKey_UpArrow;
-            case GLFW_KEY_DOWN:       return ImGuiKey_DownArrow;
-            case GLFW_KEY_PAGE_UP:    return ImGuiKey_PageUp;
-            case GLFW_KEY_PAGE_DOWN:  return ImGuiKey_PageDown;
-            case GLFW_KEY_HOME:       return ImGuiKey_Home;
-            case GLFW_KEY_END:        return ImGuiKey_End;
-            case GLFW_KEY_INSERT:     return ImGuiKey_Insert;
-            case GLFW_KEY_DELETE:     return ImGuiKey_Delete;
-            case GLFW_KEY_BACKSPACE:  return ImGuiKey_Backspace;
-            case GLFW_KEY_SPACE:      return ImGuiKey_Space;
-            case GLFW_KEY_ENTER:      return ImGuiKey_Enter;
-            case GLFW_KEY_ESCAPE:     return ImGuiKey_Escape;
-            case GLFW_KEY_A:          return ImGuiKey_A;
-            case GLFW_KEY_C:          return ImGuiKey_C;
-            case GLFW_KEY_V:          return ImGuiKey_V;
-            case GLFW_KEY_X:          return ImGuiKey_X;
-            case GLFW_KEY_Y:          return ImGuiKey_Y;
-            case GLFW_KEY_Z:          return ImGuiKey_Z;
-            default:                  return ImGuiKey_None;
+    bool ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        io.MouseWheelH += e.GetXOffset();
+        io.MouseWheel += e.GetYOffset();
+
+        return false;
+    }
+
+    bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        int key = e.GetKeyCode();
+        
+        io.AddKeyEvent((ImGuiKey)key, true);
+
+        switch (key) {
+            case GLFW_KEY_LEFT_CONTROL:
+                io.AddKeyEvent(ImGuiKey_LeftCtrl, true);
+                break;
+            case GLFW_KEY_RIGHT_CONTROL:
+                io.AddKeyEvent(ImGuiKey_RightCtrl, true);
+                break;
+            case GLFW_KEY_LEFT_SHIFT:
+                io.AddKeyEvent(ImGuiKey_LeftShift, true);
+                break;
+            case GLFW_KEY_RIGHT_SHIFT:
+                io.AddKeyEvent(ImGuiKey_RightShift, true);
+                break;
+            case GLFW_KEY_LEFT_ALT:
+                io.AddKeyEvent(ImGuiKey_LeftAlt, true);
+                break;
+            case GLFW_KEY_RIGHT_ALT:
+                io.AddKeyEvent(ImGuiKey_RightAlt, true);
+                break;
+            case GLFW_KEY_LEFT_SUPER:
+                io.AddKeyEvent(ImGuiKey_LeftSuper, true);
+                break;
+            case GLFW_KEY_RIGHT_SUPER:
+                io.AddKeyEvent(ImGuiKey_RightSuper, true);
+                break;
+            default:
+                break;
         }
+        return false;
+    }
+
+    bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        int key = e.GetKeyCode();
+
+        io.AddKeyEvent((ImGuiKey)key, false);
+
+        switch (key){
+            case GLFW_KEY_LEFT_CONTROL:
+            case GLFW_KEY_RIGHT_CONTROL:
+                io.AddKeyEvent(ImGuiKey_RightCtrl, false);
+                break;
+            case GLFW_KEY_LEFT_SHIFT:
+            case GLFW_KEY_RIGHT_SHIFT:
+                io.AddKeyEvent(ImGuiKey_RightShift, false);
+                break;
+            case GLFW_KEY_LEFT_ALT:
+            case GLFW_KEY_RIGHT_ALT:
+                io.AddKeyEvent(ImGuiKey_RightAlt, false);
+                break;
+            case GLFW_KEY_LEFT_SUPER:
+            case GLFW_KEY_RIGHT_SUPER:
+                io.AddKeyEvent(ImGuiKey_RightSuper, false);
+                break;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        int keycode = e.GetKeyCode();
+        if(keycode > 0 && keycode < 0x10000)
+            io.AddInputCharacter((unsigned short)keycode);
+
+        return false;
+    }
+
+    bool Engine::ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& e) {
+        ImGuiIO& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
+        io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+
+        glViewport(0, 0, e.GetWidth(), e.GetHeight());
+
+        return false;
     }
 
 }
