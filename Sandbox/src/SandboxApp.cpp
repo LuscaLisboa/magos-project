@@ -5,30 +5,33 @@
 class ExampleLayer : public Engine::Layer
 {
 public:
-	ExampleLayer()
-		: Layer("Example")
-	{
+	ExampleLayer() : Layer("Example"){
+
 	}
 
-	void OnUpdate() override
-	{
-		ENGINE_INFO("ExampleLayer::Update");
+	void OnUpdate() override {
+
 	}
 
-	void OnEvent(Engine::Event& event) override
-	{
-		ENGINE_TRACE("{0}", event.ToString());
+	void OnEvent(Engine::Event& event) override {
+		if(event.GetEventType() == Engine::EventType::KeyPressed) {
+			Engine::KeyPressedEvent& e = (Engine::KeyPressedEvent&)event;
+			if(e.GetKeyCode() == ENGINE_KEY_TAB) {
+				ENGINE_TRACE("TAB pressed");
+			}
+			ENGINE_TRACE("{0}", (char)e.GetKeyCode());
+		}
 	}
 
 };
 
 class Sandbox : public Engine::Application {
 public:
-    Sandbox(){
+    Sandbox() {
         PushLayer(new ExampleLayer());
         PushOverlay(new Engine::ImGuiLayer());
     }
-    ~Sandbox(){
+    ~Sandbox() {
 
     }
 };
