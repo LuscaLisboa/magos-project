@@ -52,6 +52,7 @@ target_include_directories(Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui
         ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui/backends
+        ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/glm
 )
 
 # PCH
