@@ -30,6 +30,7 @@ add_library(Engine SHARED
     Engine/src/Engine/Layer.cpp
     Engine/src/Engine/LayerStack.cpp
     Engine/src/Engine/ImGui/ImGuiLayer.cpp
+    Engine/src/Engine/ImGui/ImGuiBuild.cpp
     Engine/src/Platform/Windows/WindowsInput.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/enginepch.cpp
