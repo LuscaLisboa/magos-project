@@ -23,9 +23,7 @@ namespace Engine {
         m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
         m_ImGuiLayer = new ImGuiLayer();
-
-        unsigned int id;
-        glGenVertexArrays(1, &id);
+        PushOverlay(m_ImGuiLayer);
     }
 
     Application::~Application() {}

@@ -19,11 +19,29 @@ add_subdirectory(Engine/vendor/GLFW)
 add_library(glad STATIC Engine/vendor/glad/src/glad.c)
 target_include_directories(glad PUBLIC Engine/vendor/glad/include)
 
+# ImGui
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui)
+# set(IMGUI_SOURCES
+#     ${IMGUI_DIR}/imgui.cpp
+#     ${IMGUI_DIR}/imgui_draw.cpp
+#     ${IMGUI_DIR}/imgui_widgets.cpp
+#     ${IMGUI_DIR}/imgui_tables.cpp
+#     ${IMGUI_DIR}/imgui_demo.cpp
+#     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+#     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+# )
+# add_library(imgui STATIC ${IMGUI_SOURCES})
+# target_include_directories(imgui PUBLIC
+#     ${IMGUI_DIR}
+#     ${IMGUI_DIR}/backends
+#     ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/GLFW/include
+# )
+# target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
+
 # OpenGL
 find_package(OpenGL REQUIRED)
 
 # Engine DLL
-set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Engine/vendor/ImGui)
 add_library(Engine SHARED
     Engine/src/Engine/Application.cpp
     Engine/src/Engine/Log.cpp
@@ -34,13 +52,6 @@ add_library(Engine SHARED
     Engine/src/Platform/Windows/WindowsInput.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/enginepch.cpp
-    ${IMGUI_DIR}/imgui.cpp
-    ${IMGUI_DIR}/imgui_demo.cpp
-    ${IMGUI_DIR}/imgui_draw.cpp
-    ${IMGUI_DIR}/imgui_tables.cpp
-    ${IMGUI_DIR}/imgui_widgets.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
-    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 # Engine includes exposure
